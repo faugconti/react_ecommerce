@@ -5,8 +5,7 @@ import { Button } from "antd";
 import { GoogleOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import createOrUpdateUser from "../../functions/auth";
-
+import { createOrUpdateUser } from "../../functions/auth";
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -20,7 +19,15 @@ const Login = ({ history }) => {
     if (user && user.token) {
       history.push("/");
     }
-  }, [user]);
+  }, [user,history]);
+
+  const roleBaseRedirect = (res) => {
+    if (res.data.role === "admin") {
+      history.push("/admin/dashboard");
+    } else {
+      history.push("/user/history");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,10 +50,11 @@ const Login = ({ history }) => {
               _id: res.data._id,
             },
           });
+          roleBaseRedirect(res);
         })
         .catch((err) => console.log(err));
 
-      history.push("/");
+      // history.push("/");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -72,9 +80,10 @@ const Login = ({ history }) => {
                 _id: res.data._id,
               },
             });
+            roleBaseRedirect(res);
           })
           .catch((err) => console.log(err));
-        history.push("/");
+        // history.push("/");
       })
       .catch((err) => {
         console.log(err);
