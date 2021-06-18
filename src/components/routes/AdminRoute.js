@@ -28,6 +28,6 @@ const AdminRoute = ({ children, ...props }) => {
     // <h1 className="text-danger">Loading...</h1>
     <LoadingToRedirect />
   );
-};
+}; 
 
 export default AdminRoute;

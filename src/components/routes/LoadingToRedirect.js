@@ -8,7 +8,7 @@ const LoadingToRedirect = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCount((currentCount) => --currentCount);
-    }, 1000);
+    }, 5000);
     count === 0 && history.push("/");
 
     return () => clearInterval(interval);
