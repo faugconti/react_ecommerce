@@ -19,6 +19,9 @@ import axios from "axios";
 //       authToken,
 //     },
 //   });
+export const getProductsByCount = async (count) => {
+  return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
+};
 
 export const createProduct = async (product, authToken) =>
   await axios.post(`${process.env.REACT_APP_API}/product/`, product, {
