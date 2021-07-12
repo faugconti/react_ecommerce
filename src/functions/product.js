@@ -34,6 +34,13 @@ export const createProduct = async (product, authToken) =>
     },
   });
 
+export const updateProduct = async (slug, product, authToken) =>
+  await axios.put(`${process.env.REACT_APP_API}/product/${slug}`, product, {
+    headers: {
+      authToken,
+    },
+  });
+
 export const removeProduct = async (slug, authtoken) =>
   await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`, {
     headers: {
