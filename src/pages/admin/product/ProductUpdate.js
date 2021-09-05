@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -25,7 +25,7 @@ const initialState = {
   brand: "",
 };
 
-const ProductUpdate = ({ match ,history}) => {
+const ProductUpdate = ({ match, history }) => {
   const [values, setValues] = useState(initialState);
   const [subOptions, setSubOptions] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -37,12 +37,7 @@ const ProductUpdate = ({ match ,history}) => {
   // let { slug } = useParams();
   let { slug } = match.params;
 
-  useEffect(() => {
-    loadProduct();
-    loadCategories();
-  }, []);
-
-  const loadProduct = () => {
+  const loadProduct = useCallback(() => {
     getProduct(slug)
       .then((product) => {
         // load single product
@@ -53,17 +48,20 @@ const ProductUpdate = ({ match ,history}) => {
         });
         // prepare array of sub ids to show as default sub values in antd select
         let arr = [];
-        product.data.subs.map((s) => {
-          arr.push(s._id);
-        });
+        product.data.subs.map((s) => arr.push(s._id));
         setArrayOfSubsId((prev) => arr); //required for antd
       })
       .catch((err) => {});
-  };
+  }, [slug, values]);
 
-  const loadCategories = () => {
+  const loadCategories = useCallback(() => {
     getCategories().then((c) => setCategories(c.data));
-  };
+  }, []);
+
+  useEffect(() => {
+    loadProduct();
+    loadCategories();
+  }, [loadCategories, loadProduct]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,7 +73,7 @@ const ProductUpdate = ({ match ,history}) => {
       .then((res) => {
         setLoading(false);
         toast.success(`"${res.data.title}" is updated`);
-        history.push('/admin/products')
+        history.push("/admin/products");
       })
       .catch((err) => {
         console.log(err);

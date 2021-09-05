@@ -47,3 +47,31 @@ export const removeProduct = async (slug, authtoken) =>
       authtoken,
     },
   });
+
+export const getProducts = async (sort, order, page) =>
+  await axios.post(`${process.env.REACT_APP_API}/products/`, {
+    sort,
+    order,
+    page,
+  });
+
+export const getProductsCount = async () => {
+  return await axios.get(`${process.env.REACT_APP_API}/products/total`);
+};
+
+export const productStar = async (productId, star, authToken) =>
+  await axios.put(
+    `${process.env.REACT_APP_API}/product/star/${productId}`,
+    { star },
+    {
+      headers: {
+        authToken,
+      },
+    }
+  );
+
+export const getRelated = async (productId) => {
+  return await axios.get(
+    `${process.env.REACT_APP_API}/product/related/${productId}`
+  );
+};

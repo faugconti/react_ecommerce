@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -13,15 +13,13 @@ const CategoryUpdate = ({ history, match }) => {
   const [loading, setLoading] = useState(false);
 
   //   let { slug } = useParams();
-
-  useEffect(() => {
-    loadCategory();
-  }, []);
-
-  const loadCategory = () =>
-    getCategory(match.params.slug).then((c) => {
-      setName(c.data.name);
-    });
+  const loadCategory = useCallback(
+    () =>
+      getCategory(match.params.slug).then((c) => {
+        setName(c.data.name);
+      }),
+    [match.params.slug]
+  );
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -38,6 +36,10 @@ const CategoryUpdate = ({ history, match }) => {
         if (err.response.status === 400) toast.error(err.response.data);
       });
   };
+
+  useEffect(() => {
+    loadCategory();
+  }, [loadCategory]);
 
   return (
     <div className="container-fluid">

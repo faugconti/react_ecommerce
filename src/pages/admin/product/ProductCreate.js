@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -32,13 +32,13 @@ const ProductCreate = () => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
+  const loadCategories = useCallback(() => {
+    getCategories().then((c) => setValues({ ...values, categories: c.data }));
+  }, [values]);
+
   useEffect(() => {
     loadCategories();
-  }, []);
-
-  const loadCategories = () => {
-    getCategories().then((c) => setValues({ ...values, categories: c.data }));
-  };
+  }, [loadCategories]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

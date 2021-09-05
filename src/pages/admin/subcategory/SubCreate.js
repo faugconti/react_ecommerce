@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getCategories } from "../../../functions/category";
-import { createSub, getSubs, removeSub, setSubs } from "../../../functions/sub";
+import { createSub, getSubs, removeSub } from "../../../functions/sub";
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import CategoryForm from "../../../components/forms/CategoryForm";
@@ -19,19 +19,22 @@ const SubCreate = () => {
   const [keyword, setKeyword] = useState("");
   const [subs, setSubs] = useState([]);
 
+  const loadCategories = useCallback(
+    () =>
+      getCategories().then((c) => {
+        setCategories(c.data);
+      }),
+    []
+  );
+
+  const loadSubs = useCallback(() => {
+    getSubs().then((s) => setSubs(s.data));
+  }, []);
+
   useEffect(() => {
     loadCategories();
     loadSubs();
-  }, []);
-
-  const loadCategories = () =>
-    getCategories().then((c) => {
-      setCategories(c.data);
-    });
-
-  const loadSubs = () => {
-    getSubs().then((s) => setSubs(s.data));
-  };
+  }, [loadCategories, loadSubs]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
