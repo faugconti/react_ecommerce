@@ -32,13 +32,15 @@ const ProductCreate = () => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
-  const loadCategories = useCallback(() => {
-    getCategories().then((c) => setValues({ ...values, categories: c.data }));
-  }, [values]);
+  
 
   useEffect(() => {
+    console.log('re render')
+    const loadCategories = () => {
+      getCategories().then((c) => setValues({ ...values, categories: c.data }));
+    };
     loadCategories();
-  }, [loadCategories]);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,12 +56,13 @@ const ProductCreate = () => {
         toast.error(err.response.data.err);
       });
   };
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
+    // console.log('something changed',e.target.name,e.target.value)
     setValues({
       ...values,
       [e.target.name]: e.target.value,
     });
-  };
+  },[values]);
 
   const handleCategoryChange = (e) => {
     e.preventDefault();

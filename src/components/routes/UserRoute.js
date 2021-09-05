@@ -6,7 +6,7 @@ import LoadingToRedirect from "./LoadingToRedirect";
 const UserRoute = ({ children, ...props }) => {
   const { user } = useSelector((state) => ({ ...state }));
   return user && user.token ? (
-    <Route {...props} render={() => children} />
+    <Route {...props}  />
   ) : (
     // <h1 className="text-danger">Loading...</h1>
     <LoadingToRedirect />
